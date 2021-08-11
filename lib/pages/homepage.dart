@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'package:rive/rive.dart';
 import 'package:weather_app/widget/temperatureScale.dart';
 import 'package:weather_app/widget/verticalText.dart';
 
@@ -8,37 +11,78 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late RiveAnimationController _controller;
+
+  void _togglePlay() =>
+      setState(() => _controller.isActive = !_controller.isActive);
+  bool get isPlaying => _controller.isActive;
+  @override
+  void initState() {
+    super.initState();
+    _controller = SimpleAnimation('active');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Container(
+          color: Colors.yellow[200],
           child: Column(
             children: [
-              Align(
-                alignment: Alignment(0.00, 0.00),
-                child: Container(
-                  height: 75,
-                  width: 150,
-                  child: TemperatureScale(
-                    temperature: 100,
-                    defaultScale: true,
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 50),
+                child: Align(
+                  alignment: Alignment(-0.65, 0.00),
+                  child: Container(
+                    height: 75,
+                    width: 150,
+                    child: TemperatureScale(
+                      temperature: 26,
+                      defaultScale: false,
+                    ),
                   ),
                 ),
               ),
-/*             SizedBox(
-                height: 50,
-              ), */
-              /* Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Image.asset(
+                  /* Image.asset(
                     'assets/sunny.jpg',
                     width: 300,
                     height: 300,
+                  ), */
+                  Container(
+                    width: 300,
+                    height: 300,
+                    child: RiveAnimation.asset(
+                      'assets/sunny-loop.riv',
+                      controllers: [_controller],
+                      // onInit: (_) => setState(() {}),
+                    ),
                   ),
-                  MyVerticalText('SUNNY'),
+                  Flexible(flex: 1, child: MyVerticalText('SUNNY')),
                 ],
+              ),
+/*               Switch(
+                value: _isPlaying,
+                onChanged: (val) {
+                  setState(() {
+                    _isPlaying = val;
+                  });
+                  if (_isPlaying) {
+                    _sunnyartboard.addController(SimpleAnimation('active'));
+                  } else {
+                    _sunnyartboard.addController(SimpleAnimation('idle'));
+                  }
+                },
+              ), */
+              /*  FloatingActionButton(
+                onPressed: _togglePlay,
+                tooltip: isPlaying ? 'Pause' : 'Play',
+                child: Icon(
+                  isPlaying ? Icons.pause : Icons.play_arrow,
+                ),
               ), */
             ],
           ),

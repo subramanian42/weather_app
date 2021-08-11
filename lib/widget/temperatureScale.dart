@@ -12,7 +12,6 @@ class TemperatureScale extends StatefulWidget {
 class _TemperatureScaleState extends State<TemperatureScale> {
   Widget celsiusFormat() {
     return Row(
-      //mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           widget.temperature.toString(),
@@ -20,7 +19,7 @@ class _TemperatureScaleState extends State<TemperatureScale> {
               fontWeight: FontWeight.bold, fontSize: 70, color: Colors.black),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.end,
+          //mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(
               '\u00b0',
@@ -62,9 +61,6 @@ class _TemperatureScaleState extends State<TemperatureScale> {
                   fontWeight: FontWeight.bold,
                   fontSize: 40,
                   color: Colors.black),
-            ),
-            SizedBox(
-              height: 15,
             ),
             Text(
               'F',
