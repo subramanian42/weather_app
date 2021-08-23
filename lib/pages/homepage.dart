@@ -1,9 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'dart:convert';
 
-import 'package:rive/rive.dart';
+import 'package:flutter/material.dart';
+import 'package:weather_app/class/weather.dart';
+import 'package:weather_app/pages/blocProvider.dart';
+//import 'package:rive/rive.dart';
 import 'package:weather_app/widget/temperatureScale.dart';
 import 'package:weather_app/widget/verticalText.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   @override
@@ -11,15 +14,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late RiveAnimationController _controller;
+  late TextEditingController _citynamecontroller = TextEditingController();
+  Future<Weather> fetchWeather(String cityname) async {
+    final response = await http.get(Uri.parse(
+        'https://api.openweathermap.org/data/2.5/weather?q=$cityname&appid=${user.apikey}'));
+    //http.get(Uri.http("10.0.2.2:3000", "products", {"categoryId" : "$categoryId"}  ))
+    if (response.statusCode == 200) {
+      print('SUCCESS');
+      // print(response.body);
+      return Weather.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to fetch weather');
+    }
+  }
 
-  void _togglePlay() =>
-      setState(() => _controller.isActive = !_controller.isActive);
-  bool get isPlaying => _controller.isActive;
   @override
   void initState() {
     super.initState();
-    _controller = SimpleAnimation('active');
+    // futureWeather =fetchWeather(cityname);
+  }
+
+  @override
+  void dispose() {
+    _citynamecontroller.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,96 +65,42 @@ class _HomePageState extends State<HomePage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  /* Image.asset(
-                    'assets/sunny.jpg',
-                    width: 300,
-                    height: 300,
-                  ), */
                   Container(
-                    width: 300,
-                    height: 300,
-                    child: RiveAnimation.asset(
-                      'assets/sunny-loop.riv',
-                      controllers: [_controller],
-                      // onInit: (_) => setState(() {}),
+                    width: 200,
+                    height: 40,
+                    child: TextField(
+                      controller: _citynamecontroller,
+                      textInputAction: TextInputAction.done,
+                      onSubmitted: (String cityname) async {
+                        Weather currentweather = await fetchWeather(cityname);
+                        print('current weather variable ?');
+                        print(currentweather.temperaturepressure);
+                      },
                     ),
                   ),
                   Flexible(flex: 1, child: MyVerticalText('SUNNY')),
                 ],
               ),
-/*               Switch(
-                value: _isPlaying,
-                onChanged: (val) {
-                  setState(() {
-                    _isPlaying = val;
-                  });
-                  if (_isPlaying) {
-                    _sunnyartboard.addController(SimpleAnimation('active'));
-                  } else {
-                    _sunnyartboard.addController(SimpleAnimation('idle'));
-                  }
-                },
-              ), */
-              /*  FloatingActionButton(
-                onPressed: _togglePlay,
-                tooltip: isPlaying ? 'Pause' : 'Play',
-                child: Icon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
-                ),
-              ), */
             ],
           ),
         ),
+        bottomNavigationBar: BottomNavigationBar(
+            elevation: 12.0,
+            fixedColor: Colors.transparent,
+            selectedItemColor: Color(0X000000),
+            unselectedItemColor: Color(0X808080),
+            currentIndex: user.index,
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.wb_sunny), label: 'Now'),
+              BottomNavigationBarItem(icon: Icon(Icons.cloud), label: 'Tue'),
+              BottomNavigationBarItem(icon: Icon(Icons.waves), label: 'Wed'),
+              BottomNavigationBarItem(icon: Icon(Icons.cloud), label: 'Thurs'),
+              BottomNavigationBarItem(icon: Icon(Icons.water), label: 'Fri'),
+              BottomNavigationBarItem(icon: Icon(Icons.cloud), label: 'Sat'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.wb_sunny_rounded), label: 'Sun'),
+            ]),
       ),
     );
   }
 }
-
-/* Center(
-                        child: Image.network(
-                          'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwmYc9fXBFPKbZC_DQ9K_vYtfNLxPs01Fs8A&usqp=CAU',
-                         
-                        ),
-                      ), */
-
-
-
-/// previously used code 
-/* 
-Container(
-        color: Colors.yellow,
-        height: 75,
-        width: 150,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '100',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 70,
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  '\u00b0',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 40,
-                      color: Colors.black),
-                ),
-                Text(
-                  'C',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      color: Colors.black),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ), */
