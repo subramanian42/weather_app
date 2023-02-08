@@ -16,7 +16,7 @@ class _TemperatureScaleState extends State<TemperatureScale> {
         Text(
           widget.temperature.toString(),
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 70, color: Colors.black),
+              fontWeight: FontWeight.bold, fontSize: 70, color: Colors.white),
         ),
         Column(
           //mainAxisAlignment: MainAxisAlignment.end,
@@ -26,14 +26,14 @@ class _TemperatureScaleState extends State<TemperatureScale> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 40,
-                  color: Colors.black),
+                  color: Colors.white),
             ),
             Text(
               'C',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.black),
+                  color: Colors.white),
             ),
           ],
         ),
@@ -51,7 +51,7 @@ class _TemperatureScaleState extends State<TemperatureScale> {
         Text(
           convertToFahrenheit().toString(),
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 70, color: Colors.black),
+              fontWeight: FontWeight.bold, fontSize: 70, color: Colors.white),
         ),
         Column(
           children: [
@@ -60,14 +60,14 @@ class _TemperatureScaleState extends State<TemperatureScale> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 40,
-                  color: Colors.black),
+                  color: Colors.white),
             ),
             Text(
               'F',
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.black),
+                  color: Colors.white),
             )
           ],
         ),
