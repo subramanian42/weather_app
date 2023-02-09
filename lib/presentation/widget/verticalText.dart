@@ -13,7 +13,8 @@ class MyVerticalText extends StatelessWidget {
       alignment: WrapAlignment.center,
       children: text
           .split("")
-          .map((string) => Text(string, style: TextStyle(fontSize: 18)))
+          .map((string) =>
+              Text(string, style: TextStyle(fontSize: 18, color: Colors.white)))
           .toList(),
     );
   }

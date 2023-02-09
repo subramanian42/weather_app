@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:weather_app/class/weather.dart';
-import 'package:weather_app/pages/blocProvider.dart';
-//import 'package:rive/rive.dart';
-import 'package:weather_app/widget/temperatureScale.dart';
-import 'package:weather_app/widget/verticalText.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:weather_app/class/model.dart';
+import 'package:weather_app/business/Weatherdetails.dart';
+import 'package:rive/rive.dart';
+import 'package:weather_app/presentation/widget/temperatureScale.dart';
+import 'package:weather_app/presentation/widget/verticalText.dart';
+
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -14,11 +16,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _currentIndex = 0;
   late TextEditingController _citynamecontroller = TextEditingController();
   Future<Weather> fetchWeather(String cityname) async {
-    final response = await http.get(Uri.parse(
-        'https://api.openweathermap.org/data/2.5/weather?q=$cityname&appid=${user.apikey}'));
-    //http.get(Uri.http("10.0.2.2:3000", "products", {"categoryId" : "$categoryId"}  ))
+    final response = await http.get(Uri.parse(user.returnUrl(cityname)));
     if (response.statusCode == 200) {
       print('SUCCESS');
       // print(response.body);
@@ -40,12 +41,18 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+  changeIndex(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         body: Container(
-          color: Colors.yellow[200],
+          color: Colors.black, //Colors.yellow[200],
           child: Column(
             children: [
               Padding(
@@ -66,40 +73,30 @@ class _HomePageState extends State<HomePage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    width: 200,
-                    height: 40,
-                    child: TextField(
+                      width: 300,
+                      height: 400,
+                      child: RiveAnimation.asset('assets/weather_app.riv')
+/*                     TextField(
                       controller: _citynamecontroller,
                       textInputAction: TextInputAction.done,
                       onSubmitted: (String cityname) async {
                         Weather currentweather = await fetchWeather(cityname);
                         print('current weather variable ?');
-                        print(currentweather.temperaturepressure);
+                        print('''Description:${currentweather.description}\n
+                                 Temperature:${currentweather.temperature}\n
+                                 wind speed:${currentweather.windspeed}\n
+                                 feels like: ${currentweather.feelslike}
+                        ''');
                       },
-                    ),
-                  ),
+                    ), */
+
+                      ),
                   Flexible(flex: 1, child: MyVerticalText('SUNNY')),
                 ],
               ),
             ],
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-            elevation: 12.0,
-            fixedColor: Colors.transparent,
-            selectedItemColor: Color(0X000000),
-            unselectedItemColor: Color(0X808080),
-            currentIndex: user.index,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.wb_sunny), label: 'Now'),
-              BottomNavigationBarItem(icon: Icon(Icons.cloud), label: 'Tue'),
-              BottomNavigationBarItem(icon: Icon(Icons.waves), label: 'Wed'),
-              BottomNavigationBarItem(icon: Icon(Icons.cloud), label: 'Thurs'),
-              BottomNavigationBarItem(icon: Icon(Icons.water), label: 'Fri'),
-              BottomNavigationBarItem(icon: Icon(Icons.cloud), label: 'Sat'),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.wb_sunny_rounded), label: 'Sun'),
-            ]),
       ),
     );
   }
