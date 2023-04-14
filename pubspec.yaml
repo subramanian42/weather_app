@@ -12,11 +12,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
-  flutter_bloc: ^7.1.0
-  font_awesome_flutter: ^9.1.0
-  get: ^4.3.6
+  flutter_bloc: ^8.1.2
+  font_awesome_flutter: ^10.4.0
   http: ^0.13.3
-  rive: ^0.7.27
+  rive: ^0.10.3
 
 dev_dependencies:
   flutter_test:
